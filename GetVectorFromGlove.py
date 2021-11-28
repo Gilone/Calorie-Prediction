@@ -27,6 +27,12 @@ class GloveModel:
             vector_list.append(self.get_vector(w))
         return np.mean(vector_list, axis=0)
 
+    def get_vector_seq_from_word_seq(self, word_seq):
+        vector_seq = []
+        for w in word_seq.split(' '):
+            vector_seq.append(self.get_vector(w))
+        return vector_seq
+
     def get_graph_of_a_word_list(self, word_list):
         vector_matrix = np.matrix([self.get_vector(word) for word in word_list])
         U, _, _ = la.svd(vector_matrix, full_matrices=False)
