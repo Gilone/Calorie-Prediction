@@ -27,7 +27,7 @@ class StepsClassifier():
         self.vocab_size = len(self.word_index)
         self.emb_matrix = np.zeros((self.vocab_size, self.embedding_dim))
         for word, index in self.word_index.items():
-            self.emb_matrix[index, :] = self.GM.get_vector(word)
+            self.emb_matrix[index, :] = self.GM.get_vector(word) # potential bug
 
     def _inital_model(self):
         self.model = tf.keras.Sequential([
