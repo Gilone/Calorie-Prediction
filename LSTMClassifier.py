@@ -31,7 +31,7 @@ class StepsClassifier():
 
     def _inital_model(self):
         self.model = tf.keras.Sequential([
-            tf.keras.layers.Embedding(input_dim = self.vocab_size, output_dim = self.embedding_dim, input_length=self.max_length, weights = [self.emb_matrix], trainable=False),
+            tf.keras.layers.Embedding(input_dim = self.vocab_size+1, output_dim = self.embedding_dim, input_length=self.max_length, weights = [self.emb_matrix], trainable=False),
             tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(self.embedding_dim)),
             tf.keras.layers.Dense(self.embedding_dim, activation='relu'),
             tf.keras.layers.Dense(3, activation='softmax')
