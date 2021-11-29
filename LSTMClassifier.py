@@ -39,7 +39,7 @@ class StepsClassifier():
         self.model.summary()
         self.model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-    def _plot_training_graphs(history, string):
+    def _plot_training_graphs(self, history, string):
         plt.plot(history.history[string])
         plt.plot(history.history['val_'+string])
         plt.xlabel("Epochs")
