@@ -16,7 +16,10 @@ class GloveModel:
         self.glove_model = KeyedVectors.load_word2vec_format(word2vec_output_file, binary=False, no_header=True)
 
     def get_vector(self, word):
-        return self.glove_model[word]
+        try:
+            return self.glove_model[word]
+        except KeyError:
+            return np.random.rand(self.glove_model.vector_size)
 
     def get_similar_vector(self, word):
         return self.glove_model.most_similar(word)
