@@ -4,6 +4,7 @@ from GetVectorFromGlove import GloveModel
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
+from keras import backend as K
 
 
 class StepsClassifier():
@@ -16,7 +17,7 @@ class StepsClassifier():
         self.GM = GloveModel('.\glove.840B.300d.txt')
         self.embedding_dim = 300
         self.max_length = 200 
-        self.labels = ['0', '1', '2', '3']
+        self.labels = ['0', '1', '2']
         self._inital_token()
         self._inital_model()
 
@@ -29,6 +30,24 @@ class StepsClassifier():
         for word, index in self.word_index.items():
             self.emb_matrix[index, :] = self.GM.get_vector(word) # potential bug
 
+    def _recall_m(self, y_true, y_pred):
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+        recall = true_positives / (possible_positives + K.epsilon())
+        return recall
+
+    def _precision_m(self, y_true, y_pred):
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+        precision = true_positives / (predicted_positives + K.epsilon())
+        return precision
+
+
+    def _f1_m(self, y_true, y_pred):
+        precision = self._precision_m(y_true, y_pred)
+        recall = self._recall_m(y_true, y_pred)
+        return 2*((precision*recall)/(precision+recall+K.epsilon()))
+
     def _inital_model(self):
         self.model = tf.keras.Sequential([
             tf.keras.layers.Embedding(input_dim = self.vocab_size, output_dim = self.embedding_dim, input_length=self.max_length, weights = [self.emb_matrix], trainable=False),
@@ -37,7 +56,7 @@ class StepsClassifier():
             tf.keras.layers.Dense(3, activation='softmax')
         ])
         self.model.summary()
-        self.model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        self.model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy', self._f1_m])
 
     def _plot_training_graphs(self, history, string):
         plt.plot(history.history[string])
@@ -60,11 +79,17 @@ class StepsClassifier():
         self._plot_training_graphs(history, "loss")
 
     def _predict_single(self, test_seq):
-        test_padded = self.paddle_all_seq(test_seq)
+        test_padded = self.paddle_all_seq([test_seq])
         return self.model.predict(test_padded)
 
-    def prediction(self, test_seq):
+    def prediction_single(self, test_seq):
         pred = self._predict_single(test_seq)
-        # return self.labels[np.argmax(pred)]
-        return np.argmax(pred)
+        return self.labels[np.argmax(pred[-1])]
 
+    def evaluate_model(self, test_seq=None, test_label_seq=None):
+        if not test_seq or test_label_seq:
+            test_seq = self.validation_seq
+            test_label_seq = self.validation_label_seq
+        test_seq = self.paddle_all_seq(test_seq)
+        loss,  accuracy, f1 = self.model.evaluate(test_seq, test_label_seq, verbose=1) 
+        return accuracy, f1
