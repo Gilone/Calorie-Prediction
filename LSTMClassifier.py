@@ -9,17 +9,21 @@ from keras import backend as K
 
 class StepsClassifier():
 
-    def __init__(self, train_seq, training_label_seq, validation_seq, validation_label_seq):
+    def __init__(self, train_seq, training_label_seq, validation_seq, validation_label_seq, glove_model=None):
         self.train_seq = train_seq
         self.training_label_seq = training_label_seq
         self.validation_seq = validation_seq
         self.validation_label_seq = validation_label_seq
-        self.GM = GloveModel('.\glove.840B.300d.txt')
         self.embedding_dim = 300
         self.max_length = 200 
         self.labels = ['0', '1', '2']
+        if not glove_model:
+            self.GM = GloveModel('.\glove.840B.300d.txt')
+        else:
+            self.GM = glove_model
         self._inital_token()
         self._inital_model()
+
 
     def _inital_token(self):
         self.tokenizer = Tokenizer()
