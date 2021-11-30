@@ -16,7 +16,7 @@ class StepsClassifier():
         self.GM = GloveModel('.\glove.840B.300d.txt')
         self.embedding_dim = 300
         self.max_length = 200 
-        self.labels = ['0', '1', '2']
+        self.labels = ['0', '1', '2', '3']
         self._inital_token()
         self._inital_model()
 
@@ -65,5 +65,6 @@ class StepsClassifier():
 
     def prediction(self, test_seq):
         pred = self._predict_single(test_seq)
-        return self.labels[np.argmax(pred)]
+        # return self.labels[np.argmax(pred)]
+        return np.argmax(pred)
 
