@@ -4,8 +4,8 @@ from GetVectorFromGlove import GloveModel
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
-import tensorflow.keras.backend as K
-from sklearn.metrics import f1_score
+# import tensorflow.keras.backend as K
+import tensorflow_addons as tfa 
 
 class StepsClassifier():
 
@@ -36,23 +36,23 @@ class StepsClassifier():
         for word, index in self.word_index.items():
             self.emb_matrix[index, :] = self.GM.get_vector(word) # potential bug
 
-    def _recall_m(self, y_true, y_pred):
-        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-        recall = true_positives / (possible_positives + K.epsilon())
-        return recall
+    # def _recall_m(self, y_true, y_pred):
+    #     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    #     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+    #     recall = true_positives / (possible_positives + K.epsilon())
+    #     return recall
 
-    def _precision_m(self, y_true, y_pred):
-        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-        predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-        precision = true_positives / (predicted_positives + K.epsilon())
-        return precision
+    # def _precision_m(self, y_true, y_pred):
+    #     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    #     predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    #     precision = true_positives / (predicted_positives + K.epsilon())
+    #     return precision
 
 
-    def _f1_m(self, y_true, y_pred):
-        precision = self._precision_m(y_true, y_pred)
-        recall = self._recall_m(y_true, y_pred)
-        return 2*((precision*recall)/(precision+recall+K.epsilon()))
+    # def _f1_m(self, y_true, y_pred):
+    #     precision = self._precision_m(y_true, y_pred)
+    #     recall = self._recall_m(y_true, y_pred)
+    #     return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
     def _inital_model(self):
         self.model = tf.keras.Sequential([
@@ -63,7 +63,7 @@ class StepsClassifier():
             tf.keras.layers.Dense(3, activation='softmax')
         ])
         self.model.summary()
-        self.model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy', f1_score])
+        self.model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy', tfa.metrics.F1Score(num_classes=3, average='macro')])
 
     def _plot_training_graphs(self, history, string):
         plt.plot(history.history[string])
