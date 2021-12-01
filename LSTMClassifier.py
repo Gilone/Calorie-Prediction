@@ -4,8 +4,8 @@ from GetVectorFromGlove import GloveModel
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
-from keras import backend as K
-
+import tensorflow.keras.backend as K
+from sklearn.metrics import f1_score
 
 class StepsClassifier():
 
@@ -63,7 +63,7 @@ class StepsClassifier():
             tf.keras.layers.Dense(3, activation='softmax')
         ])
         self.model.summary()
-        self.model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy', self._f1_m])
+        self.model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy', f1_score])
 
     def _plot_training_graphs(self, history, string):
         plt.plot(history.history[string])
