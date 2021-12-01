@@ -3,7 +3,7 @@
 ## Doc.
 
 overleaf link:  
-google doc link: 
+google doc link: [Part3](https://docs.google.com/document/d/15J0G9hjMIxExnnnBLDmIgxw9vZXAuAhXgimY3jqOwBI/edit?usp=sharing)
 
 ## Result
 
