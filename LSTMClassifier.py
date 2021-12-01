@@ -9,13 +9,15 @@ from keras import backend as K
 
 class StepsClassifier():
 
-    def __init__(self, train_seq, training_label_seq, validation_seq, validation_label_seq, glove_model=None):
+    def __init__(self, train_seq, training_label_seq, validation_seq, validation_label_seq, glove_model=None, activation='relu', max_length = 200, trainable=True):
         self.train_seq = train_seq
+        self.activation = activation
         self.training_label_seq = training_label_seq
         self.validation_seq = validation_seq
         self.validation_label_seq = validation_label_seq
         self.embedding_dim = 300
-        self.max_length = 200 
+        self.trainable = trainable
+        self.max_length = max_length
         self.labels = ['0', '1', '2']
         if not glove_model:
             self.GM = GloveModel('.\glove.840B.300d.txt')
@@ -54,9 +56,10 @@ class StepsClassifier():
 
     def _inital_model(self):
         self.model = tf.keras.Sequential([
-            tf.keras.layers.Embedding(input_dim = self.vocab_size, output_dim = self.embedding_dim, input_length=self.max_length, weights = [self.emb_matrix], trainable=False),
+            tf.keras.layers.Embedding(input_dim = self.vocab_size, output_dim = self.embedding_dim, input_length=self.max_length, \
+                weights = [self.emb_matrix], trainable=self.trainable),
             tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(self.embedding_dim)),
-            tf.keras.layers.Dense(self.embedding_dim, activation='relu'),
+            tf.keras.layers.Dense(self.embedding_dim, activation=self.activation),
             tf.keras.layers.Dense(3, activation='softmax')
         ])
         self.model.summary()
