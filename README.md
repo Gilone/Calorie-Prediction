@@ -2,10 +2,14 @@
 
 ## Abstract
 
-Analyzing calories based on recipes is a critical and meaningful task for many platforms.  
+Analyzing calories based on recipes is a critical and meaningful task for many platforms.
+
 In this paper, we aim to predict the calories of recipes from Food.com dataset into three categories based on their ingredients, making techniques and analysing recipe’s preparation steps.  
+
 We made a detailed study on datasets, using Logistic Regression, Support Vector Machine, Random Forest Classifier, Multi-layer Perceptron Classifier, XGBoost, LSTM and LSTM with GloVe word embedding models, and optimized them by tuning and adjusting various hyperparameters and model structures. 
+
 We also compared the performance between different models and different features. In conclusion, the Logistic Regression model has the best performance on techniques and ingredients features with 0.5145 F1 score, and the LSTM with GloVe word embedding model performs best on steps features with 0.50118 F1 score.  
+
 Our result is very helpful for the platforms to use recipes information provided by users to create value.
 
 ## Doc.
