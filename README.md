@@ -1,4 +1,4 @@
-# Calorie-Prediction
+# Healthy Diet is All You Need
 
 ## Doc.
 
