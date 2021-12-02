@@ -1,5 +1,7 @@
 # Healthy Diet is All You Need
 
+Hao Feng, Kaiqi Jin, Mingqing Xu and Pai Tong
+
 ## Abstract
 
 Analyzing calories based on recipes is a critical and meaningful task for many platforms.
