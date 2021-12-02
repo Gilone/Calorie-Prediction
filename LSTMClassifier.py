@@ -9,7 +9,7 @@ import tensorflow_addons as tfa
 
 class StepsClassifier():
 
-    def __init__(self, train_seq, training_label_seq, validation_seq, validation_label_seq, glove_model=None, activation='relu', max_length = 200, trainable=True):
+    def __init__(self, train_seq, training_label_seq, validation_seq, validation_label_seq, glove_model=None, activation='relu', max_length = 200, trainable=True, using_glove=False):
         self.train_seq = train_seq
         self.activation = activation
         self.training_label_seq = training_label_seq
@@ -24,8 +24,11 @@ class StepsClassifier():
         else:
             self.GM = glove_model
         self._inital_token()
+        if using_glove:
+            self.w = [self.emb_matrix]
+        else:
+            self.w = None
         self._inital_model()
-
 
     def _inital_token(self):
         self.tokenizer = Tokenizer()
@@ -57,7 +60,7 @@ class StepsClassifier():
     def _inital_model(self):
         self.model = tf.keras.Sequential([
             tf.keras.layers.Embedding(input_dim = self.vocab_size, output_dim = self.embedding_dim, input_length=self.max_length, \
-                trainable=self.trainable), # weights = [self.emb_matrix], 
+                 weights = self.w, trainable=self.trainable), # weights = [self.emb_matrix], 
             tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(self.embedding_dim)),
             tf.keras.layers.Dense(self.embedding_dim, activation=self.activation),
             tf.keras.layers.Dense(3, activation='softmax')
