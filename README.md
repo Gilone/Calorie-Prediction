@@ -2,7 +2,7 @@
 
 ## Doc.
 
-overleaf link:  [Overleaf](https://www.overleaf.com/project/61a6d99bab117381be5813ae)
+overleaf link:  [Overleaf](https://www.overleaf.com/project/61a6d99bab117381be5813ae)  
 google doc link: [Part3](https://docs.google.com/document/d/15J0G9hjMIxExnnnBLDmIgxw9vZXAuAhXgimY3jqOwBI/edit?usp=sharing)
 
 ## Result
@@ -14,8 +14,6 @@ google doc link: [Part3](https://docs.google.com/document/d/15J0G9hjMIxExnnnBLDm
 | Ingredients_ids(1000)              | 0.5596 | 0.5817 | 0.4496 | 0.5246 | 0.5219                     |
 | Techniques + Ingredients_ids(1000) | 0.5381 | 0.5948 | 0.4521 | 0.5274 | 0.5283                     |
 | Glove Ingredients                  | 0.4907 | 0.5399 | 0.5256 | 0.4928 | 0.4929                     |
-
-
 
 ## Ref.
 
